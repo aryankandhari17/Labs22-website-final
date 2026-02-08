@@ -242,6 +242,8 @@ document.addEventListener('DOMContentLoaded', () => {
             div.className = 'arc-ticker-item';
             const img = document.createElement('img');
             img.src = src;
+            img.loading = 'lazy';
+            img.decoding = 'async';
             div.appendChild(img);
             brandContainer.appendChild(div);
             tickerItems.push(div);
