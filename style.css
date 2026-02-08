@@ -8,7 +8,7 @@
     --text-secondary: #6e6e73;
     --accent: #19171c;
     /* Jitter off-black CTA */
-    --wire-color: #ff6b35;
+    --wire-color: #F44A00;
     /* Orange hover color */
 
     --radius-xl: 40px;
@@ -182,10 +182,11 @@ html {
 }
 
 .wire-path {
-    stroke: #e0e0e0;
+    stroke: #F44A00;
     stroke-width: 2;
     stroke-linecap: round;
-    opacity: 0.6;
+    opacity: 1;
+    /* Match solid button color exactly */
 }
 
 /* Cursor Dot (hidden by default, used by JS) */
@@ -315,6 +316,7 @@ html {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     background: var(--wire-color);
     color: #fff;
+    border-color: var(--wire-color);
 }
 
 /* Main Layout */
