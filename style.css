@@ -464,14 +464,9 @@ html {
 .sticky-project-card img {
     width: 100%;
     height: auto;
-    aspect-ratio: 16 / 9;
-    /* Enforce shared aspect ratio to prevent jump */
-    object-fit: cover;
     border-radius: 24px;
     background: #f5f5f7;
     box-shadow: none;
-    /* Prevent layout shifting while loading */
-    content-visibility: auto;
 }
 
 .card-content.centered {
