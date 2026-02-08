@@ -41,16 +41,12 @@ body {
     font-family: var(--font-main);
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-    /* Prevent horizontal scroll causing zoom out */
     width: 100%;
-    /* Strict width constraint */
     position: relative;
     overflow-x: clip;
-    /* Clip horizontal overflow w/o breaking sticky */
+    /* Modern fix for horizontal overflow without breaking sticky */
     overscroll-behavior-x: none;
-    /* Prevent horizontal bounce revealing footer */
-    /* Prevent bounce if needed */
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Typography */
@@ -163,9 +159,10 @@ a {
 }
 
 html {
-    /* overflow-x: hidden; REMOVED to fix sticky scroll */
     width: 100%;
+    overflow-x: clip;
     overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
 }
 
 /* Wires SVG */
@@ -540,8 +537,8 @@ html {
 /* Arc Ticker Styles */
 .arc-ticker-container {
     position: relative;
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
+    width: 100%;
+    margin-left: 0;
     /* Center breakout on desktop */
     /* Center breakout on desktop */
     height: 100vh;
@@ -552,12 +549,12 @@ html {
 
 @media (max-width: 768px) {
     .arc-ticker-container {
-        width: 100vw;
+        width: 100%;
         position: relative;
-        left: 50%;
-        right: 50%;
-        margin-left: -50vw;
-        margin-right: -50vw;
+        left: 0;
+        right: 0;
+        margin-left: 0;
+        margin-right: 0;
         height: 65vh;
         /* Reduced from 90vh to close gap below */
         /* Plenty of height */
@@ -1324,7 +1321,7 @@ img[src*="Toggle"] {
 }
 
 /* Disable Sticky Footer on Mobile/Tablet/iPad */
-@media (max-width: 1300px),
+@media (max-width: 1400px),
 (hover: none) {
     #page-content {
         margin-bottom: 100vh !important;
