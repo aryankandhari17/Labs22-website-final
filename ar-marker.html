@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Labs22 AR Experience</title>
+
+    <!-- A-Frame for 3D -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <!-- AR.js for marker-based AR -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* UI overlay */
+        .ar-ui {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            text-align: center;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .ar-logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ar-instruction {
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Loading screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .loading-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(102, 126, 234, 0.2);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div class="loading-logo">Labs22</div>
+        <div class="loading-text">Initializing AR Camera...</div>
+    </div>
+
+    <!-- AR.js Scene - Marker Based -->
+    <a-scene embedded
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        vr-mode-ui="enabled: false" renderer="logarithmicDepthBuffer: true; antialias: true;" gesture-detector>
+        <!-- Assets - Portfolio Images -->
+        <a-assets>
+            <img id="aura" src="aura.png" crossorigin="anonymous">
+            <img id="burger" src="Burger.png" crossorigin="anonymous">
+            <img id="titan" src="Titan.png" crossorigin="anonymous">
+            <img id="vanguard" src="vanguard.png" crossorigin="anonymous">
+            <img id="valeri" src="Valeri.jpg" crossorigin="anonymous">
+            <img id="beach" src="brand identity/beach.png" crossorigin="anonymous">
+            <img id="bunzos" src="brand identity/bunzos.png" crossorigin="anonymous">
+            <img id="kridha" src="brand identity/kridha.png" crossorigin="anonymous">
+        </a-assets>
+
+        <!-- Marker: When HIRO marker is detected, show 3D content -->
+        <a-marker preset="hiro">
+            <!-- Floating Gallery - Digital Experiences (Left side) -->
+            <a-entity position="-0.8 0.3 0" rotation="-90 0 0">
+                <!-- Title -->
+                <a-text value="DIGITAL" color="#667eea" width="2" position="0 0.6 0" align="center"
+                    font="dejavu"></a-text>
+
+                <!-- Portfolio Cards -->
+                <a-image src="#aura" width="0.5" height="0.35" position="-0.3 0.2 0"
+                    animation="property: position; to: -0.3 0.25 0; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-image>
+                <a-image src="#burger" width="0.5" height="0.35" position="0.3 0.2 0.05"
+                    animation="property: position; to: 0.3 0.25 0.05; dir: alternate; dur: 2500; loop: true; easing: easeInOutSine"></a-image>
+                <a-image src="#titan" width="0.5" height="0.35" position="-0.3 -0.2 0.1"
+                    animation="property: position; to: -0.3 -0.15 0.1; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-image>
+                <a-image src="#vanguard" width="0.5" height="0.35" position="0.3 -0.2 0.15"
+                    animation="property: position; to: 0.3 -0.15 0.15; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine"></a-image>
+            </a-entity>
+
+            <!-- Floating Gallery - Brand Identity (Right side) -->
+            <a-entity position="0.8 0.3 0" rotation="-90 0 0">
+                <!-- Title -->
+                <a-text value="BRAND" color="#f093fb" width="2" position="0 0.6 0" align="center"
+                    font="dejavu"></a-text>
+
+                <!-- Brand Cards -->
+                <a-image src="#beach" width="0.5" height="0.35" position="-0.3 0.2 0"
+                    animation="property: position; to: -0.3 0.25 0; dir: alternate; dur: 2100; loop: true; easing: easeInOutSine"></a-image>
+                <a-image src="#bunzos" width="0.5" height="0.35" position="0.3 0.2 0.05"
+                    animation="property: position; to: 0.3 0.25 0.05; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine"></a-image>
+                <a-image src="#kridha" width="0.5" height="0.35" position="0 -0.2 0.1"
+                    animation="property: position; to: 0 -0.15 0.1; dir: alternate; dur: 1900; loop: true; easing: easeInOutSine"></a-image>
+            </a-entity>
+
+            <!-- Center Logo - 3D floating -->
+            <a-entity position="0 0.5 0" rotation="-90 0 0">
+                <a-text value="Labs22" color="#ffffff" width="4" position="0 0 0" align="center" font="dejavu"
+                    animation="property: position; to: 0 0.1 0; dir: alternate; dur: 3000; loop: true; easing: easeInOutSine"></a-text>
+                <a-text value="What We Do" color="#888888" width="2" position="0 -0.3 0" align="center"
+                    font="dejavu"></a-text>
+            </a-entity>
+
+            <!-- Decorative Ring -->
+            <a-ring position="0 0.01 0" rotation="-90 0 0" color="#667eea" radius-inner="1.2" radius-outer="1.25"
+                opacity="0.5"
+                animation="property: rotation; to: -90 360 0; dur: 20000; loop: true; easing: linear"></a-ring>
+        </a-marker>
+
+        <!-- Camera -->
+        <a-entity camera></a-entity>
+    </a-scene>
+
+    <!-- UI Overlay -->
+    <div class="ar-ui">
+        <div class="ar-logo">Labs22</div>
+        <div class="ar-instruction">Point camera at the HIRO marker</div>
+    </div>
+
+    <script>
+        // Hide loading screen when AR is ready
+        const scene = document.querySelector('a-scene');
+        scene.addEventListener('loaded', function () {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 1500);
+        });
+
+        // Fallback - hide loading after 5 seconds anyway
+        setTimeout(() => {
+            document.getElementById('loadingScreen').classList.add('hidden');
+        }, 5000);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Labs22 - What We Do - Immersive Experience">
+    <title>Labs22 | What We Do</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            touch-action: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Dome Container */
+        .dome-viewport {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            perspective: 1200px;
+            overflow: hidden;
+        }
+
+        /* Futuristic Dome Shell */
+        .dome-shell {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200vmax;
+            height: 200vmax;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(ellipse at center,
+                    transparent 0%,
+                    transparent 40%,
+                    rgba(30, 30, 40, 0.15) 60%,
+                    rgba(20, 20, 30, 0.4) 80%,
+                    rgba(10, 10, 15, 0.7) 100%);
+            pointer-events: none;
+            opacity: 0;
+            animation: domeFormation 2.5s ease-out forwards;
+        }
+
+        @keyframes domeFormation {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Dome Grid Lines */
+        .dome-grid {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 180vmax;
+            height: 180vmax;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            pointer-events: none;
+            opacity: 0;
+            animation: gridFadeIn 3s ease-out 0.5s forwards;
+        }
+
+        .dome-grid::before,
+        .dome-grid::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(102, 126, 234, 0.08);
+        }
+
+        .dome-grid::before {
+            top: 10%;
+            left: 10%;
+            width: 80%;
+            height: 80%;
+        }
+
+        .dome-grid::after {
+            top: 25%;
+            left: 25%;
+            width: 50%;
+            height: 50%;
+        }
+
+        @keyframes gridFadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Center Vertical Line */
+        .center-divider {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(to bottom,
+                    transparent 0%,
+                    rgba(102, 126, 234, 0.3) 30%,
+                    rgba(102, 126, 234, 0.3) 70%,
+                    transparent 100%);
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: dividerFadeIn 2s ease-out 1s forwards;
+        }
+
+        @keyframes dividerFadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Main Content Container */
+        .content-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+
+        /* Section Labels */
+        .section-label {
+            position: absolute;
+            top: 15%;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: labelFadeIn 1s ease-out forwards;
+            z-index: 10;
+        }
+
+        .section-label.left {
+            left: 5%;
+            color: #667eea;
+            animation-delay: 1.5s;
+        }
+
+        .section-label.right {
+            right: 5%;
+            text-align: right;
+            color: #f093fb;
+            animation-delay: 1.7s;
+        }
+
+        @keyframes labelFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Gallery Sides */
+        .gallery-side {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20% 3% 15%;
+            overflow: hidden;
+        }
+
+        .gallery-side.left {
+            padding-right: 2%;
+        }
+
+        .gallery-side.right {
+            padding-left: 2%;
+        }
+
+        /* Ticker Track */
+        .ticker-track {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            width: 100%;
+            opacity: 0;
+            animation: contentFadeIn 1.5s ease-out forwards;
+        }
+
+        .gallery-side.left .ticker-track {
+            animation-delay: 1.8s;
+        }
+
+        .gallery-side.right .ticker-track {
+            animation-delay: 2s;
+        }
+
+        @keyframes contentFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Ticker Row */
+        .ticker-row {
+            display: flex;
+            gap: 1rem;
+            animation: tickerScroll 25s linear infinite;
+        }
+
+        .ticker-row.reverse {
+            animation: tickerScrollReverse 30s linear infinite;
+        }
+
+        @keyframes tickerScroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        @keyframes tickerScrollReverse {
+            0% {
+                transform: translateX(-50%);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        /* Gallery Item */
+        .gallery-item {
+            flex-shrink: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .gallery-item img {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* Size classes for variety */
+        .gallery-item.large {
+            width: 180px;
+            height: 120px;
+        }
+
+        .gallery-item.medium {
+            width: 140px;
+            height: 140px;
+        }
+
+        .gallery-item.small {
+            width: 120px;
+            height: 120px;
+        }
+
+        .gallery-item.wide {
+            width: 200px;
+            height: 130px;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Service Chips - Floating */
+        .service-chips {
+            position: absolute;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            max-width: 45%;
+            z-index: 5;
+        }
+
+        .service-chips.left {
+            bottom: 12%;
+            left: 3%;
+            justify-content: flex-start;
+        }
+
+        .service-chips.right {
+            bottom: 12%;
+            right: 3%;
+            justify-content: flex-end;
+        }
+
+        .chip {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.6rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            animation: chipFadeIn 0.6s ease-out forwards;
+        }
+
+        .chip.digital {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+        }
+
+        .chip.brand {
+            background: rgba(240, 147, 251, 0.15);
+            color: #f093fb;
+        }
+
+        .chip:nth-child(1) {
+            animation-delay: 2.2s;
+        }
+
+        .chip:nth-child(2) {
+            animation-delay: 2.4s;
+        }
+
+        .chip:nth-child(3) {
+            animation-delay: 2.6s;
+        }
+
+        @keyframes chipFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            animation: headerFadeIn 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes headerFadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 0.6rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-top: 0.2rem;
+            text-align: center;
+        }
+
+        /* Footer CTA */
+        .footer-cta {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            text-align: center;
+            z-index: 100;
+            opacity: 0;
+            animation: footerFadeIn 1s ease-out 2.5s forwards;
+        }
+
+        @keyframes footerFadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .cta-text {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.1em;
+        }
+
+        .cta-link {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 25px;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-link:hover,
+        .cta-link:active {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Gyroscope hint */
+        .gyro-hint {
+            position: absolute;
+            bottom: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            opacity: 0;
+            animation: hintPulse 3s ease-in-out 3s forwards;
+            z-index: 50;
+        }
+
+        @keyframes hintPulse {
+            0% {
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .gyro-icon {
+            width: 32px;
+            height: 32px;
+            margin: 0 auto 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: tilt 2s ease-in-out infinite;
+        }
+
+        @keyframes tilt {
+
+            0%,
+            100% {
+                transform: rotate(-10deg);
+            }
+
+            50% {
+                transform: rotate(10deg);
+            }
+        }
+
+        .gyro-icon svg {
+            width: 16px;
+            height: 16px;
+            stroke: rgba(255, 255, 255, 0.5);
+        }
+
+        .gyro-text {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.05em;
+        }
+
+        /* Responsive - Tablet */
+        @media (min-width: 768px) {
+            .section-label {
+                font-size: 0.75rem;
+                top: 12%;
+            }
+
+            .section-label.left {
+                left: 8%;
+            }
+
+            .section-label.right {
+                right: 8%;
+            }
+
+            .gallery-item.large {
+                width: 280px;
+                height: 180px;
+            }
+
+            .gallery-item.medium {
+                width: 200px;
+                height: 200px;
+            }
+
+            .gallery-item.small {
+                width: 160px;
+                height: 160px;
+            }
+
+            .gallery-item.wide {
+                width: 300px;
+                height: 200px;
+            }
+
+            .chip {
+                padding: 0.5rem 1rem;
+                font-size: 0.7rem;
+            }
+
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            .tagline {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Landscape mode */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .header {
+                padding: 0.8rem;
+            }
+
+            .logo {
+                font-size: 1rem;
+            }
+
+            .section-label {
+                top: 18%;
+            }
+
+            .gallery-side {
+                padding: 15% 3% 12%;
+            }
+
+            .gallery-item.large {
+                width: 150px;
+                height: 100px;
+            }
+
+            .gallery-item.medium {
+                width: 110px;
+                height: 110px;
+            }
+
+            .gallery-item.small {
+                width: 90px;
+                height: 90px;
+            }
+
+            .footer-cta {
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Futuristic Dome Shell -->
+    <div class="dome-viewport">
+        <div class="dome-shell"></div>
+        <div class="dome-grid"></div>
+        <div class="center-divider"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div>
+            <div class="logo">Labs22</div>
+            <div class="tagline">What We Do</div>
+        </div>
+    </header>
+
+    <!-- Section Labels -->
+    <div class="section-label left">Digital Experiences</div>
+    <div class="section-label right">Brand Identity</div>
+
+    <!-- Main Content -->
+    <div class="content-container">
+        <!-- Left Side: Digital Experiences -->
+        <div class="gallery-side left">
+            <div class="ticker-track">
+                <!-- Row 1 -->
+                <div class="ticker-row">
+                    <div class="gallery-item large"><img src="aura.png" alt="Aura"></div>
+                    <div class="gallery-item medium"><img src="Burger.png" alt="Burger"></div>
+                    <div class="gallery-item wide"><img src="Titan.png" alt="Titan"></div>
+                    <div class="gallery-item large"><img src="vanguard.png" alt="Vanguard"></div>
+                    <div class="gallery-item medium"><img src="Valeri.jpg" alt="Valeri"></div>
+                    <!-- Duplicate for seamless loop -->
+                    <div class="gallery-item large"><img src="aura.png" alt="Aura"></div>
+                    <div class="gallery-item medium"><img src="Burger.png" alt="Burger"></div>
+                    <div class="gallery-item wide"><img src="Titan.png" alt="Titan"></div>
+                    <div class="gallery-item large"><img src="vanguard.png" alt="Vanguard"></div>
+                    <div class="gallery-item medium"><img src="Valeri.jpg" alt="Valeri"></div>
+                </div>
+
+                <!-- Row 2 - Reverse -->
+                <div class="ticker-row reverse">
+                    <div class="gallery-item medium"><img src="Titan.png" alt="Titan"></div>
+                    <div class="gallery-item large"><img src="Valeri.jpg" alt="Valeri"></div>
+                    <div class="gallery-item wide"><img src="aura.png" alt="Aura"></div>
+                    <div class="gallery-item medium"><img src="vanguard.png" alt="Vanguard"></div>
+                    <div class="gallery-item large"><img src="Burger.png" alt="Burger"></div>
+                    <!-- Duplicate -->
+                    <div class="gallery-item medium"><img src="Titan.png" alt="Titan"></div>
+                    <div class="gallery-item large"><img src="Valeri.jpg" alt="Valeri"></div>
+                    <div class="gallery-item wide"><img src="aura.png" alt="Aura"></div>
+                    <div class="gallery-item medium"><img src="vanguard.png" alt="Vanguard"></div>
+                    <div class="gallery-item large"><img src="Burger.png" alt="Burger"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Brand Identity -->
+        <div class="gallery-side right">
+            <div class="ticker-track">
+                <!-- Row 1 -->
+                <div class="ticker-row">
+                    <div class="gallery-item medium"><img src="brand identity/beach.png" alt="Beach"></div>
+                    <div class="gallery-item small"><img src="brand identity/bunzos.png" alt="Bunzos"></div>
+                    <div class="gallery-item medium"><img src="brand identity/kridha.png" alt="Kridha"></div>
+                    <div class="gallery-item small"><img src="brand identity/Post- cool.png" alt="Cool"></div>
+                    <div class="gallery-item medium"><img src="brand identity/Post- palmira.png" alt="Palmira"></div>
+                    <div class="gallery-item small"><img src="brand identity/Post-compani.png" alt="Compani"></div>
+                    <!-- Duplicate -->
+                    <div class="gallery-item medium"><img src="brand identity/beach.png" alt="Beach"></div>
+                    <div class="gallery-item small"><img src="brand identity/bunzos.png" alt="Bunzos"></div>
+                    <div class="gallery-item medium"><img src="brand identity/kridha.png" alt="Kridha"></div>
+                    <div class="gallery-item small"><img src="brand identity/Post- cool.png" alt="Cool"></div>
+                    <div class="gallery-item medium"><img src="brand identity/Post- palmira.png" alt="Palmira"></div>
+                    <div class="gallery-item small"><img src="brand identity/Post-compani.png" alt="Compani"></div>
+                </div>
+
+                <!-- Row 2 - Reverse -->
+                <div class="ticker-row reverse">
+                    <div class="gallery-item small"><img src="brand identity/Post-funista chair.png" alt="Funista">
+                    </div>
+                    <div class="gallery-item medium"><img src="brand identity/Post-furnista.png" alt="Furnista"></div>
+                    <div class="gallery-item small"><img src="brand identity/Post-kloz light.png" alt="Kloz Light">
+                    </div>
+                    <div class="gallery-item medium"><img src="brand identity/Post-kloz.png" alt="Kloz"></div>
+                    <div class="gallery-item small"><img src="brand identity/Post-valeri.png" alt="Valeri"></div>
+                    <div class="gallery-item medium"><img src="brand identity/Post-yoko.png" alt="Yoko"></div>
+                    <!-- Duplicate -->
+                    <div class="gallery-item small"><img src="brand identity/Post-funista chair.png" alt="Funista">
+                    </div>
+                    <div class="gallery-item medium"><img src="brand identity/Post-furnista.png" alt="Furnista"></div>
+                    <div class="gallery-item small"><img src="brand identity/Post-kloz light.png" alt="Kloz Light">
+                    </div>
+                    <div class="gallery-item medium"><img src="brand identity/Post-kloz.png" alt="Kloz"></div>
+                    <div class="gallery-item small"><img src="brand identity/Post-valeri.png" alt="Valeri"></div>
+                    <div class="gallery-item medium"><img src="brand identity/Post-yoko.png" alt="Yoko"></div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="ticker-row">
+                    <div class="gallery-item medium"><img src="brand identity/Post-nivara.png" alt="Nivara"></div>
+                    <div class="gallery-item small"><img src="brand identity/Post-toggle art.png" alt="Toggle Art">
+                    </div>
+                    <div class="gallery-item medium"><img src="brand identity/Post-rainforest.png" alt="Rainforest">
+                    </div>
+                    <div class="gallery-item small"><img src="brand identity/Soap.png" alt="Soap"></div>
+                    <div class="gallery-item medium"><img src="brand identity/Post-still.png" alt="Still"></div>
+                    <div class="gallery-item small"><img src="brand identity/raniforst packaing.png" alt="Packaging">
+                    </div>
+                    <!-- Duplicate -->
+                    <div class="gallery-item medium"><img src="brand identity/Post-nivara.png" alt="Nivara"></div>
+                    <div class="gallery-item small"><img src="brand identity/Post-toggle art.png" alt="Toggle Art">
+                    </div>
+                    <div class="gallery-item medium"><img src="brand identity/Post-rainforest.png" alt="Rainforest">
+                    </div>
+                    <div class="gallery-item small"><img src="brand identity/Soap.png" alt="Soap"></div>
+                    <div class="gallery-item medium"><img src="brand identity/Post-still.png" alt="Still"></div>
+                    <div class="gallery-item small"><img src="brand identity/raniforst packaing.png" alt="Packaging">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Chips -->
+    <div class="service-chips left">
+        <span class="chip digital">UI/UX Design</span>
+        <span class="chip digital">Web & App Dev</span>
+        <span class="chip digital">UX Audit</span>
+    </div>
+
+    <div class="service-chips right">
+        <span class="chip brand">Brand Strategy</span>
+        <span class="chip brand">Packaging</span>
+        <span class="chip brand">Social Media</span>
+    </div>
+
+    <!-- Gyroscope Hint (mobile) -->
+    <div class="gyro-hint" id="gyroHint">
+        <div class="gyro-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                <line x1="12" y1="18" x2="12" y2="18" />
+            </svg>
+        </div>
+        <div class="gyro-text">Tilt to explore</div>
+    </div>
+
+    <!-- Footer CTA -->
+    <footer class="footer-cta">
+        <div class="cta-text">Ready to create something amazing?</div>
+        <a href="index.html" class="cta-link">Visit Labs22</a>
+    </footer>
+
+    <script>
+        // Auto-hide gyro hint after showing
+        const gyroHint = document.getElementById('gyroHint');
+
+        // Check if device has gyroscope
+        if (window.DeviceOrientationEvent) {
+            // Request permission for iOS 13+
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                // iOS 13+ requires user gesture to request permission
+                document.body.addEventListener('click', function requestGyro() {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(permissionState => {
+                            if (permissionState === 'granted') {
+                                enableGyroscope();
+                            }
+                        })
+                        .catch(console.error);
+                    document.body.removeEventListener('click', requestGyro);
+                }, { once: true });
+            } else {
+                // Non-iOS devices
+                enableGyroscope();
+            }
+        } else {
+            // No gyroscope, hide hint
+            if (gyroHint) gyroHint.style.display = 'none';
+        }
+
+        function enableGyroscope() {
+            const contentContainer = document.querySelector('.content-container');
+
+            window.addEventListener('deviceorientation', function (e) {
+                const gamma = e.gamma || 0; // Left/right tilt (-90 to 90)
+                const beta = e.beta || 0;   // Front/back tilt (-180 to 180)
+
+                // Subtle parallax based on tilt
+                const xShift = gamma * 0.3;
+                const yShift = (beta - 45) * 0.2; // 45 is roughly holding phone angle
+
+                contentContainer.style.transform = `translate(${xShift}px, ${yShift}px)`;
+            });
+        }
+
+        // Touch/mouse to dismiss hint early
+        document.addEventListener('touchstart', hideHint, { once: true });
+        document.addEventListener('mousedown', hideHint, { once: true });
+
+        function hideHint() {
+            if (gyroHint) {
+                gyroHint.style.transition = 'opacity 0.5s ease';
+                gyroHint.style.opacity = '0';
+            }
+        }
+    </script>
+</body>
+
+</html>

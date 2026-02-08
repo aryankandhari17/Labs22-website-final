@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labs22 | Science-First Design</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="page-content">
+
+        <!-- Floating Pill Navigation -->
+        <nav class="floating-nav">
+            <div class="nav-pill-bg"></div>
+            <div class="nav-content">
+                <a href="#" class="nav-logo">
+                    <img src="labs22-5.png" alt="Labs22">
+                </a>
+                <a href="mailto:info@labs22.com" class="nav-cta">Get in touch</a>
+            </div>
+        </nav>
+
+        <!-- Wires SVG Layer -->
+        <svg class="wire-svg" id="wireSvg">
+            <path class="wire-path" id="wire1" fill="none" />
+            <path class="wire-path" id="wire2" fill="none" />
+            <path class="wire-path" id="wire3" fill="none" />
+            <path class="wire-path" id="wire4" fill="none" />
+            <path class="wire-path" id="wire5" fill="none" />
+        </svg>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-container">
+                <h1 class="hero-title">
+                    <span class="word" data-wire="1">You</span>
+                    <span class="word" data-wire="2">Are</span>
+                    <span class="word" data-wire="3">Hooked</span>
+                    <br>
+                    <span style="white-space: nowrap;">
+                        <span class="word" data-wire="4">in</span>
+                        <span class="word timer-word" data-wire="5"><span id="timerValue">0</span></span>
+                    </span>
+                    <span class="word">seconds.</span>
+                </h1>
+                <p class="hero-subtitle">That wasn’t magic. It was calculated.</p>
+                <div class="hero-actions">
+                    <a href="#services" class="btn-primary">View Services</a>
+                </div>
+            </div>
+        </section>
+        <!-- Main Content Container -->
+        <main class="main-container">
+
+            <!-- Section: Science-First Reveal -->
+            <section class="reveal-section">
+                <div class="reveal-container">
+                    <p class="reveal-text" id="revealText">
+                        We are a science-first design consultancy. Every decision we make is backed by research,
+                        psychology,
+                        and
+                        data — not guesswork.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Section: Services (Sticky Stacking) -->
+            <section class="section-block services-stack" id="services">
+                <div class="section-header centered">
+                    <h2>What we do</h2>
+                </div>
+
+                <!-- Group 1: Digital Experiences -->
+                <div class="service-group">
+                    <!-- Static Header (Scrolls away) -->
+                    <div class="category-header centered">
+                        <h3 class="jitter-headline">Digital Experiences</h3>
+                        <p class="category-description">We design and audit digital products to improve conversion,
+                            reduce drop-offs, and increase retention—using UX research, behavioural insights, and proven
+                            design patterns.</p>
+                        <p class="jitter-subtext">
+                            <span class="service-pill">Web & App Development</span>
+                            <span class="service-pill">UX Audit</span>
+                            <span class="service-pill">UI UX Design</span>
+                        </p>
+                    </div>
+
+                    <!-- Stacking Cards Track -->
+                    <div class="cards-track">
+                        <!-- Card 1 -->
+                        <div class="sticky-project-card" style="--stack-index: 1;">
+                            <img src="Valeri.jpg" alt="Valeri Project">
+                        </div>
+                        <!-- Card 2 -->
+                        <div class="sticky-project-card" style="--stack-index: 2;">
+                            <img src="Titan.png" alt="Titan Project">
+                        </div>
+                        <!-- Card 3 -->
+                        <div class="sticky-project-card" style="--stack-index: 3;">
+                            <img src="aura.png" alt="Aura Project">
+                        </div>
+                        <!-- Card 4 -->
+                        <div class="sticky-project-card" style="--stack-index: 4;">
+                            <img src="Burger.png" alt="Burger Project">
+                        </div>
+                        <!-- Card 5 -->
+                        <div class="sticky-project-card" style="--stack-index: 5;">
+                            <img src="vanguard.png" alt="Vanguard Project">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group 2: Brand Identity (Arc Ticker) -->
+                <div class="service-group" style="margin-top: 15vh;">
+                    <!-- Header -->
+                    <div class="category-header centered">
+                        <h3 class="jitter-headline">Brand Identity</h3>
+                        <p class="category-description">We build brand systems that make businesses easier to recognize,
+                            trust, and scale.</p>
+                        <p class="jitter-subtext">
+                            <span class="service-pill">Brand Strategy</span>
+                            <span class="service-pill">Packaging Design</span>
+                            <span class="service-pill">Social Media Design</span>
+                        </p>
+                    </div>
+
+                    <!-- Dynamic Arc Ticker Container -->
+                    <div id="brand-arc-ticker" class="arc-ticker-container">
+                        <!-- Images will be injected here by script.js -->
+                    </div>
+
+                    <!-- Arrow Controls (outside container so JS doesn't clear them) -->
+                    <div class="arc-ticker-controls">
+                        <button id="arc-prev" class="arc-arrow arc-arrow-left" aria-label="Previous">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M15 18l-6-6 6-6" />
+                            </svg>
+                        </button>
+                        <button id="arc-next" class="arc-arrow arc-arrow-right" aria-label="Next">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M9 18l6-6-6-6" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: What You Get (Feature Grid) -->
+            <section class="section-block" id="process">
+                <div class="section-header centered">
+                    <h2>What you get</h2>
+                </div>
+
+                <div class="features-grid">
+                    <!-- Feature 1 -->
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <img src="figma files.png" alt="Design">
+                        </div>
+                        <h4>Design files.</h4>
+                        <p>Figma & Adobe source files.</p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <img src="interactive prototype 1.png" alt="Prototype">
+                        </div>
+                        <h4>Interactive prototypes.</h4>
+                        <p>Clickable preview versions.</p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <img src="brand repository 1.png" alt="Brand">
+                        </div>
+                        <h4>Brand system.</h4>
+                        <p>Usage guidelines & standards.</p>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <img src="ux audit spreadsheet 1.png" alt="Audit">
+                        </div>
+                        <h4>UX Audit.</h4>
+                        <p>Detailed PDF report & fixes.</p>
+                    </div>
+
+                    <!-- Feature 5 -->
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <img src="design to dev handoff 1.png" alt="Handoff">
+                        </div>
+                        <h4>Dev Handoff.</h4>
+                        <p>Production-ready assets.</p>
+                    </div>
+
+                    <!-- Feature 6 -->
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <img src="full end to end 1.png" alt="Full Package">
+                        </div>
+                        <h4>The Full Package.</h4>
+                        <p>End-to-end design & code.</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Our Clients Section -->
+        <section class="clients-section">
+            <div class="clients-container">
+                <div class="section-header centered">
+                    <h2>Who We Have Worked With</h2>
+                </div>
+
+                <div class="logo-ticker">
+                    <div class="logo-track">
+                        <!-- Set 1 -->
+                        <img src="clients/Bytesalt.png" class="client-logo" alt="Bytesalt">
+                        <img src="clients/Chopard x gemsrock.png" class="client-logo" alt="Chopard">
+                        <img src="clients/ENOC.png" class="client-logo" alt="ENOC">
+                        <img src="clients/Kridha.png" class="client-logo" alt="Kridha">
+                        <img src="clients/PF.png" class="client-logo" alt="PF">
+                        <img src="clients/Rainforest.png" class="client-logo" alt="Rainforest">
+                        <img src="clients/Red beryl.png" class="client-logo" alt="Red beryl">
+                        <img src="clients/Stag.png" class="client-logo" alt="Stag">
+                        <img src="clients/TBO.png" class="client-logo" alt="TBO">
+                        <img src="clients/Toggle art.png" class="client-logo" alt="Toggle art">
+                        <img src="clients/Visa.png" class="client-logo" alt="Visa">
+
+                        <!-- Set 2 (Duplicate for seamless scroll) -->
+                        <img src="clients/Bytesalt.png" class="client-logo" alt="Bytesalt">
+                        <img src="clients/Chopard x gemsrock.png" class="client-logo" alt="Chopard">
+                        <img src="clients/ENOC.png" class="client-logo" alt="ENOC">
+                        <img src="clients/Kridha.png" class="client-logo" alt="Kridha">
+                        <img src="clients/PF.png" class="client-logo" alt="PF">
+                        <img src="clients/Rainforest.png" class="client-logo" alt="Rainforest">
+                        <img src="clients/Red beryl.png" class="client-logo" alt="Red beryl">
+                        <img src="clients/Stag.png" class="client-logo" alt="Stag">
+                        <img src="clients/TBO.png" class="client-logo" alt="TBO">
+                        <img src="clients/Toggle art.png" class="client-logo" alt="Toggle art">
+                        <img src="clients/Visa.png" class="client-logo" alt="Visa">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+    </div> <!-- End Page Content -->
+
+    <!-- Footer -->
+    <footer class="main-footer" id="footer">
+        <div class="footer-main">
+            <div class="footer-cta-container">
+                <img src="labs22-5.png" alt="Labs22" class="footer-brand-logo">
+                <h2 class="footer-catchy-text">Still here? <br><span>You're still hooked.</span></h2>
+                <p class="footer-subtext">Most visitors only read 20% of a page. You made it to the bottom. <br>That's
+                    what good design does.</p>
+                <a href="mailto:info@labs22.com" class="footer-cta-btn">Get in touch</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="copyright">© 2026 Labs22. Global Design Consultancy.</div>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/labs22dsgn/" aria-label="Instagram" target="_blank" rel="noopener">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                        <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                    </svg>
+                </a>
+                <a href="https://x.com/labs22design?s=21&t=6zjfXL92_mjXePE7LThzCw" aria-label="X" target="_blank"
+                    rel="noopener">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="currentColor">
+                        <path
+                            d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/company/labs22/" aria-label="LinkedIn" target="_blank" rel="noopener">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                        <rect width="4" height="12" x="2" y="9" />
+                        <circle cx="4" cy="4" r="2" />
+                    </svg>
+                </a>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- Interactive Script -->
+    <!-- FORCE MOBILE HERO FONT SIZE -->
+    <style>
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 72px !important;
+                line-height: 1.0 !important;
+            }
+        }
+    </style>
+    <script src="script.js"></script>
+</body>
+
+</html>

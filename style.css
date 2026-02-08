@@ -1,0 +1,1368 @@
+/* Global Reset & Variables */
+:root {
+    --bg-color: #ffffff;
+    --card-bg: #f5f5f7;
+    /* Jitter grey for cards */
+    --text-primary: #19171c;
+    /* Jitter off-black */
+    --text-secondary: #6e6e73;
+    --accent: #19171c;
+    /* Jitter off-black CTA */
+    --wire-color: #ff6b35;
+    /* Orange hover color */
+
+    --radius-xl: 40px;
+    /* Jitter Bento Radius */
+    --radius-lg: 32px;
+    --radius-md: 24px;
+    --radius-pill: 9999px;
+
+    --shadow-nav: 0px 1px 6px rgba(0, 0, 0, 0.06), 0px 2px 32px rgba(0, 0, 0, 0.16);
+    --shadow-card: none;
+    /* Jitter cards rely on color contrast mostly */
+    --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.08);
+    /* Keep a subtle lift for interactivity */
+
+    --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+
+    --container-max: 1200px;
+    /* FLUID MARGINS: Scale from 16px (mobile) to 80px (desktop) */
+    --padding-page: clamp(16px, 5vw, 80px);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: var(--font-main);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    /* Prevent horizontal scroll causing zoom out */
+    width: 100%;
+    /* Strict width constraint */
+    position: relative;
+    overflow-x: clip;
+    /* Clip horizontal overflow w/o breaking sticky */
+    overscroll-behavior-x: none;
+    /* Prevent horizontal bounce revealing footer */
+    /* Prevent bounce if needed */
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4 {
+    font-weight: 800;
+    /* Extra Bold like Jitter */
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+}
+
+p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    font-weight: 450;
+    letter-spacing: -0.01em;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Floating Navigation Container */
+.floating-nav {
+    position: absolute;
+    /* Changed from fixed to scroll away */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    z-index: 1010;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-pill-bg {
+    display: none;
+    /* Pill background no longer needed */
+}
+
+.nav-content {
+    width: 100%;
+    max-width: 1400px;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+}
+
+.nav-logo img {
+    height: 28px;
+    /* Jitter Logo Height */
+    width: auto;
+    display: block;
+}
+
+.nav-links {
+    display: flex;
+    gap: 32px;
+}
+
+.nav-links a {
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: var(--accent);
+}
+
+.nav-cta {
+    position: fixed;
+    /* Keep only this sticky/fixed */
+    top: 24px;
+    right: 40px;
+    background: var(--accent);
+    color: #fff;
+    height: 56px;
+    /* Matches btn-primary height */
+    padding: 0 36px;
+    /* Matches btn-primary padding */
+    border-radius: 50px;
+    font-size: 1.1rem;
+    /* Matches btn-primary font size */
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.3s ease, opacity 0.3s ease;
+    z-index: 1100;
+}
+
+.nav-cta:hover {
+    transform: scale(1.05);
+    background-color: var(--wire-color);
+}
+
+.nav-cta.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+}
+
+html {
+    /* overflow-x: hidden; REMOVED to fix sticky scroll */
+    width: 100%;
+    overscroll-behavior-y: none;
+}
+
+/* Wires SVG */
+.wire-svg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 90;
+    overflow: hidden;
+    /* CRITICAL: Prevent SVG paths from triggering scroll */
+}
+
+.wire-path {
+    stroke: #e0e0e0;
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0.6;
+}
+
+/* Cursor Dot (hidden by default, used by JS) */
+.cursor-dot {
+    position: fixed;
+    width: 48px;
+    height: 48px;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.cursor-dot.visible {
+    opacity: 1;
+}
+
+.cursor-dot img {
+    width: 100%;
+    height: 100%;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    /* Enforce full screen height */
+    padding: 0 var(--padding-page);
+    /* Let flexbox handle vertical spacing */
+    padding-top: 80px;
+    /* Slight offset for nav visually */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Center horizontally */
+    justify-content: center;
+    /* Center vertically */
+    text-align: center;
+}
+
+.hero-container {
+    max-width: 900px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Ensure internal center */
+}
+
+.hero-title {
+    font-size: clamp(3.5rem, 9vw, 7.2rem);
+    /* Approx 115px max */
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    color: var(--text-primary);
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 50;
+    /* Below wires */
+}
+
+.word {
+    display: inline-block;
+    opacity: 0.15;
+    transition: opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.word.hooked,
+.timer-word {
+    opacity: 1 !important;
+}
+
+.timer-word {
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.hero-subtitle.visible {
+    opacity: 0.8;
+    transform: translateY(0);
+}
+
+.hero-actions {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
+    /* Slight delay after subtitle */
+    position: relative;
+    z-index: 60;
+}
+
+.hero-actions.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 56px;
+    /* Explicit height for matching nav-cta */
+    padding: 0 36px;
+    background: #fff;
+    color: var(--wire-color);
+    border: 2px solid var(--wire-color);
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-radius: 999px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    background: var(--wire-color);
+    color: #fff;
+}
+
+/* Main Layout */
+.main-container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    /* Use the fluid padding variable */
+    padding: 0 var(--padding-page);
+}
+
+/* Science-First Reveal Section */
+.reveal-section {
+    position: relative;
+    min-height: 100vh;
+    padding: 0 var(--padding-page);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* 
+   RESTORE DESKTOP LAYOUT (Fix for "Science First" shift)
+   We override the global fluid padding for this specific section on desktop 
+   to ensure it matches the original design exactly.
+*/
+@media (min-width: 1024px) {
+    .reveal-section {
+        padding: 0 20px;
+        /* Original fixed padding */
+    }
+}
+
+.reveal-container {
+    width: 100%;
+    max-width: 847px;
+    padding: 0;
+    margin: 0;
+}
+
+.reveal-text {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.15rem;
+    color: #D7D7DB;
+    text-align: left;
+    margin: 0;
+}
+
+.reveal-word {
+    position: relative;
+    display: inline;
+    transition: color 0.15s linear;
+}
+
+.reveal-word.active {
+    color: #19171c;
+}
+
+.section-block {
+    margin-bottom: 160px;
+}
+
+/* Services Sticky Stacking Section */
+/* Services Sticky Stacking Section */
+.services-stack {
+    display: block;
+    /* Standard block flow for sticky stacking */
+    position: relative;
+    padding-bottom: 200px;
+}
+
+.section-header.centered {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 80px;
+    padding-top: 100px;
+    /* Add some top breathing room */
+}
+
+.section-header h2 {
+    display: block;
+    background: transparent;
+    color: #19171C;
+    padding: 0;
+    border-radius: 0;
+    font-size: clamp(2.5rem, 6vw, 72px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 48px;
+    white-space: normal;
+    /* Allow wrapping only if needed */
+}
+
+/* Services Groups & Stacking */
+.service-group {
+    position: relative;
+    padding-bottom: 200px;
+}
+
+.category-header.centered {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 15vh;
+    padding: 0;
+}
+
+/* The track wraps the cards */
+.cards-track {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sticky-project-card {
+    position: sticky;
+    top: calc(100px + (var(--stack-index) * 30px));
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    justify-content: center;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.6s ease;
+    transform: scale(0.9);
+    margin-bottom: 27vh;
+    /* Calculated match */
+    z-index: 1;
+    border-radius: 24px;
+}
+
+.sticky-project-card.is-active {
+    transform: scale(1);
+    z-index: 10;
+    /* Bring active card to front awareness */
+    box-shadow:
+        rgba(0, 0, 0, 0) 0px 187px 52px 0px,
+        rgba(0, 0, 0, 0.01) 0px 119px 48px 0px,
+        rgba(0, 0, 0, 0.05) 0px 67px 40px 0px,
+        rgba(0, 0, 0, 0.09) 0px 30px 30px 0px,
+        rgba(0, 0, 0, 0.1) 0px 7px 16px 0px;
+}
+
+.sticky-project-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: none;
+    /* Shadow handled by parent */
+}
+
+.card-content.centered {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 40px;
+    z-index: 10;
+}
+
+.jitter-headline {
+    /* Reduced max from 100px to 80px to prevent 2-line break */
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    /* slightly looser line height */
+    letter-spacing: -3px;
+    color: #19171C;
+    margin-bottom: 24px;
+    /* Reduced from 64px */
+    white-space: nowrap;
+    /* Force single line if it fits */
+}
+
+.category-description {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: var(--text-secondary);
+    margin: 0 auto 48px auto;
+    line-height: 1.5;
+    font-weight: 450;
+    letter-spacing: -0.04em;
+    text-align: center;
+    max-width: 1000px;
+}
+
+.jitter-subtext {
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.6;
+    letter-spacing: 0.05em;
+    color: #19171C;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+    align-items: center;
+}
+
+.service-pill {
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+}
+
+.subtext-sep {
+    color: #D1D1D6;
+    /* Lighter color for the separator */
+    margin: 0 16px;
+    /* Space around the pipe */
+    font-weight: 300;
+}
+
+/* Service Group - allows ticker overflow */
+.service-group {
+    position: relative;
+    overflow: visible;
+    z-index: 1;
+}
+
+/* Arc Ticker Styles */
+.arc-ticker-container {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    /* Center breakout on desktop */
+    /* Center breakout on desktop */
+    height: 100vh;
+    overflow: visible;
+    margin-top: 10vh;
+    /* Consistent spacing */
+}
+
+@media (max-width: 768px) {
+    .arc-ticker-container {
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        height: 65vh;
+        /* Reduced from 90vh to close gap below */
+        /* Plenty of height */
+        overflow: visible;
+        /* Don't clip! */
+        margin-top: -15vh;
+        /* Calculated match */
+    }
+
+    .arc-ticker-item {
+        top: 25%;
+        /* Lowered for better balance */
+        width: 280px !important;
+        height: auto !important;
+    }
+
+    .arc-ticker-item img {
+        height: auto !important;
+        width: 100% !important;
+        aspect-ratio: 1/1.4;
+    }
+
+    .arc-ticker-container::after {
+        display: none;
+    }
+}
+
+/* The White Hill Mask - Matching Jitter 'Orbit' Sphere */
+.arc-ticker-container::after {
+    content: '';
+    position: absolute;
+    bottom: -30vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110vw;
+    /* Refined width for perfect curve */
+    height: 50vh;
+    background: #fff;
+    border-radius: 50%;
+    z-index: 10;
+    pointer-events: none;
+    box-shadow: 0 -20px 40px rgba(255, 255, 255, 1);
+    /* Blend edge */
+}
+
+.arc-ticker-item {
+    position: absolute;
+    top: 25%;
+    left: 0;
+    /* JS handles X positioning */
+    transform-origin: center bottom;
+    /* Rotate from bottom for fan effect */
+    will-change: transform;
+}
+
+.arc-ticker-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    background: #f0f0f0;
+}
+
+/* Arc Ticker Arrow Controls */
+.arc-ticker-controls {
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 24px;
+    z-index: 100;
+}
+
+.arc-arrow {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    color: var(--wire-color);
+    /* Orange arrows by default */
+}
+
+/* Desktop Hover */
+@media (hover: hover) {
+    .arc-arrow:hover {
+        background: var(--wire-color);
+        /* Orange on hover */
+        color: #fff;
+        /* White icon */
+        transform: scale(1.1);
+        border-color: var(--wire-color);
+    }
+}
+
+/* Mobile Active (Touch) */
+.arc-arrow:active {
+    background: var(--wire-color);
+    /* Orange on tap */
+    color: #fff;
+    /* White icon */
+    transform: scale(0.95);
+    border-color: var(--wire-color);
+}
+
+.arc-arrow svg {
+    width: 24px;
+    height: 24px;
+}
+
+@media (max-width: 768px) {
+    .arc-ticker-controls {
+        display: none !important;
+        /* Hide arrows, use swipe instead */
+    }
+
+    .arc-ticker-container {
+        /* Enable touch events for swipe script */
+        pointer-events: all;
+    }
+}
+
+/* Landscape Override Removed */
+
+@media (max-width: 1024px) {
+    .jitter-headline {
+        font-size: 64px;
+    }
+
+    .sticky-card {
+        padding: 60px 20px;
+    }
+
+    .visual-layer {
+        width: 95%;
+    }
+}
+
+/* Features Grid (What You Get) */
+.features-grid {
+    display: grid;
+    /* Auto-fit will try to fit as many 300px cards as possible, then wrap */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+@media (max-width: 1024px) {
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 Columns on Tablet */
+    }
+
+    .hero-title {
+        font-size: clamp(3rem, 10vw, 5rem);
+        /* Dampen massive font on tablet */
+    }
+}
+
+@media (max-width: 768px) {
+    .reveal-text {
+        font-size: 40px;
+        line-height: 1.2;
+        letter-spacing: -1.5px;
+    }
+
+    .jitter-headline {
+        font-size: 2.8rem;
+        /* Smaller for mobile */
+        white-space: normal;
+        margin-bottom: 16px;
+    }
+
+    /* Hide Wires & Cursor on Mobile */
+    /* Hide Wires & Cursor on Mobile */
+    .wire-svg,
+    .cursor-dot,
+    .wire-path,
+    circle {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+
+    .category-description {
+        font-size: 22px;
+        /* Increased by 4px */
+        margin-bottom: 24px;
+        /* Reduced margin */
+        padding: 0;
+        /* Let main-container handle the 16px padding */
+        white-space: normal;
+        line-height: 1.3;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .jitter-subtext {
+        font-size: 14px;
+        /* Slightly smaller for a tighter look */
+        padding: 0;
+        /* Let main-container handle the 16px padding */
+        line-height: 1.4;
+        gap: 24px;
+        /* Reduced from 40px */
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        text-align: center;
+    }
+
+    .service-pill {
+        text-underline-offset: 4px;
+        font-weight: 600;
+        /* Slightly bolder for clarity */
+        letter-spacing: 0.02em;
+        /* Tighter than desktop */
+    }
+
+
+
+    html,
+    body {
+        overflow-x: clip;
+        /* Modern fix: stops scroll but keeps sticky working */
+        width: 100%;
+        position: relative;
+    }
+
+    /* Tighter Mobile Stacking with visible "peaking" */
+    .sticky-project-card {
+        /* Dynamic top offset so previous cards remain visible at top */
+        top: calc(12vh + (var(--stack-index) * 60px));
+        margin-bottom: 5vh;
+        transform: scale(0.95);
+        width: 100%;
+        max-width: 100%;
+        left: 0;
+        position: sticky;
+        border-radius: 16px;
+        /* Reduced from 24px */
+    }
+
+    .sticky-project-card img {
+        border-radius: 16px;
+        /* Reduced from 24px */
+    }
+
+    /* Allow headline to wrap on mobile */
+    .jitter-headline {
+        font-size: 3rem;
+        /* Smaller to fit */
+        white-space: normal;
+        /* Allow wrapping */
+        line-height: 1.1;
+        text-align: center;
+        width: 100%;
+        padding: 0 10px;
+        /* Safe padding */
+    }
+
+    /* FORCE Overflows to be visible for sticky to work */
+    .service-group,
+    .cards-track {
+        overflow: visible !important;
+    }
+
+    .service-group {
+        padding-bottom: 0;
+    }
+
+    .section-header h2 {
+        font-size: clamp(2.5rem, 8vw, 48px);
+    }
+
+    .hero-title {
+        font-size: 4.5rem !important;
+        line-height: 1.0;
+        letter-spacing: -2px;
+    }
+
+    .feature-card img {
+        max-width: 100%;
+    }
+}
+
+.feature-card {
+    background: #fff;
+    border-radius: var(--radius-md);
+    padding: 32px;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.2s;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+}
+
+.icon-box {
+    width: 64px;
+    height: 64px;
+    background: transparent;
+    /* Remove grey background */
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.icon-box img {
+    width: 64px;
+    /* Full size icon */
+    height: 64px;
+    object-fit: contain;
+}
+
+.feature-card h4 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+.feature-card p {
+    font-size: 1rem;
+}
+
+
+
+/* Main Content Stacking */
+/* Page Content Wrapper for Sticky Footer */
+#page-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    /* Ensure full width coverage */
+    background: #fff;
+    margin-bottom: 100vh;
+}
+
+/* Our Clients Section */
+.clients-section {
+    padding: 120px 0;
+    overflow: hidden;
+    position: relative;
+    background: #fff;
+}
+
+@media (max-width: 768px) {
+    .clients-section {
+        padding: 60px 0;
+        /* Reduced from 120px for mobile */
+    }
+}
+
+.clients-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.logo-ticker {
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 20px 0;
+    width: 100%;
+    /* Force width */
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    /* Fade edges */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.logo-track {
+    display: inline-flex;
+    gap: 80px;
+    animation: ticker-scroll 40s linear infinite;
+    align-items: center;
+}
+
+.client-logo {
+    height: 48px;
+    max-width: 200px;
+    /* Prevent them from getting TOO wide */
+    /* Adjust based on preference, 40-60px is standard */
+    width: auto;
+    object-fit: contain;
+    filter: grayscale(1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+
+/* Group: Mid-Text (ENOC, TBO, Chopard) */
+img[src*="ENOC"],
+img[src*="TBO"],
+img[src*="Chopard"] {
+    height: 72px;
+}
+
+/* Group: Visa */
+img[src*="Visa"] {
+    height: 60px;
+}
+
+/* Group: Icons needing boost */
+img[src*="PF"] {
+    height: 80px;
+}
+
+/* Group: High-boost (Red Beryl) */
+img[src*="Red"] {
+    height: 105px;
+}
+
+/* Group: Max-boost (Stag, Toggle Art) */
+img[src*="Stag"],
+img[src*="Toggle"] {
+    height: 125px;
+}
+
+/* Jitter-like hover: colorize and slight scale */
+.client-logo:hover {
+    filter: grayscale(0) opacity(1);
+    transform: scale(1.05);
+}
+
+.logo-ticker:hover .logo-track {
+    animation-play-state: paused;
+}
+
+@keyframes ticker-scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+        /* Moves exactly half way, then resets seamlessly */
+    }
+}
+
+
+
+/* Footer */
+.main-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
+
+    background-color: #000;
+    color: #fff;
+    padding: 0 8vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.footer-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.footer-cta-container {
+    max-width: 900px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-brand-logo {
+    width: 240px;
+    height: auto;
+    margin-bottom: 4rem;
+    opacity: 0.9;
+    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.1));
+}
+
+.footer-catchy-text {
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    margin-bottom: 4rem;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.footer-catchy-text.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.footer-catchy-text span {
+    color: #555;
+    display: block;
+}
+
+.footer-subtext {
+    font-size: 1.1rem;
+    color: #888;
+    margin-bottom: 3.5rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.footer-cta-btn {
+    display: inline-flex;
+    padding: 1.4rem 3.8rem;
+    border-radius: 100px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    font-family: var(--font-main);
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    background: #fff;
+    color: #000;
+    box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
+}
+
+.footer-cta-btn:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 0 20px 60px rgba(255, 255, 255, 0.2);
+    background: var(--wire-color);
+    color: #fff;
+}
+
+.footer-bottom {
+    position: absolute;
+    bottom: 2rem;
+    left: 8vw;
+    right: 8vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.copyright {
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.social-icons {
+    display: flex;
+    gap: 2rem;
+}
+
+.social-icons a {
+    color: #fff !important;
+    transition: transform 0.3s ease, color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-icons a:hover {
+    transform: translateY(-3px);
+    color: var(--wire-color);
+}
+
+.social-icons svg {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+}
+
+.social-icons a[aria-label="X"] svg {
+    fill: currentColor;
+    stroke: none;
+}
+
+.status {
+    color: #555;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    background: #00ff00;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+    .bento-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .hero-title {
+        font-size: 4rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .floating-nav {
+        height: 64px;
+    }
+
+    .nav-logo img {
+        height: 22px;
+        /* Reduced from 28px */
+    }
+
+    .nav-content {
+        padding: 0 20px;
+    }
+
+    .nav-cta {
+        right: 20px;
+        padding: 0 24px;
+        height: 46px;
+        /* Unified size */
+        top: 12px;
+        font-size: 15px;
+        /* Unified size */
+    }
+
+    .btn-primary {
+        padding: 0 24px;
+        height: 46px;
+        font-size: 15px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Hero title font size handled by 768px media query with !important */
+
+    /* Footer Mobile */
+    .main-footer {
+        padding: 8rem 5vw 4rem 5vw !important;
+        /* Increased top padding */
+        height: auto !important;
+        /* Allow height to grow beyond 100vh */
+        min-height: 100vh;
+        border-radius: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        /* Space out top content from bottom info */
+    }
+
+    .footer-main {
+        margin-bottom: 4rem;
+        /* Reduced from 10rem */
+    }
+
+    .footer-catchy-text {
+        font-size: clamp(2.5rem, 6vw, 4rem);
+    }
+
+    .footer-brand-logo {
+        width: 180px;
+    }
+
+    .footer-cta-btn {
+        padding: 0 32px;
+        height: 46px;
+        /* Unified size */
+        font-size: 15px;
+        /* Unified size */
+        display: inline-flex;
+        width: auto;
+        min-width: 200px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 24px;
+        text-align: center;
+    }
+
+    .social-icons {
+        margin: 16px 0;
+    }
+
+    .client-logo {
+        height: 36px;
+        filter: grayscale(1);
+    }
+
+    /* Group: Mid-Text - Standardizing visually */
+    img[src*="Chopard"] {
+        height: 60px;
+        /* Increased to match others visually */
+    }
+
+    img[src*="ENOC"],
+    img[src*="TBO"] {
+        height: 48px;
+        /* Reduced to match others visually */
+    }
+
+    /* Group: Visa */
+    img[src*="Visa"] {
+        height: 45px;
+    }
+
+    /* Group: Icons */
+    img[src*="PF"] {
+        height: 60px;
+    }
+
+    /* Group: High-boost (Red Beryl) */
+    img[src*="Red"] {
+        height: 75px;
+    }
+
+    /* Group: Max-boost (Stag, Toggle Art) */
+    img[src*="Stag"],
+    img[src*="Toggle"] {
+        height: 90px;
+    }
+
+    .logo-track {
+        gap: 40px;
+    }
+}
+
+/* Disable Sticky Footer on Mobile/Tablet/iPad */
+@media (max-width: 1300px),
+(hover: none) {
+    #page-content {
+        margin-bottom: 100vh !important;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        /* Masking shadow */
+        min-height: 101vh;
+        /* Ensure it covers viewport */
+        position: relative;
+        z-index: 10;
+        background: #fff;
+    }
+
+    .main-footer {
+        position: fixed !important;
+        height: 100dvh !important;
+        /* Use dynamic height for mobile */
+        z-index: 1 !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0 5vw;
+        bottom: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .footer-main {
+        height: auto;
+        padding-top: 2rem;
+    }
+
+    .footer-bottom {
+        bottom: 1.5rem;
+        left: 5vw;
+        right: 5vw;
+        flex-direction: column;
+        gap: 1rem;
+        border: none;
+        padding-top: 0;
+    }
+}

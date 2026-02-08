@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labs22 AR Marker - Print This</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            font-family: 'Inter', -apple-system, sans-serif;
+            color: #fff;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.15em;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .instructions {
+            max-width: 500px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .marker-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .marker-container img {
+            width: 300px;
+            height: 300px;
+            display: block;
+        }
+
+        .steps {
+            max-width: 400px;
+            text-align: left;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .step-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-top: 1rem;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        @media print {
+            body {
+                background: #fff;
+                color: #000;
+            }
+
+            .logo,
+            h1 {
+                color: #000;
+                -webkit-text-fill-color: #000;
+            }
+
+            .instructions,
+            .steps,
+            .btn {
+                display: none;
+            }
+
+            .marker-container {
+                box-shadow: none;
+                border: 2px solid #000;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="logo">Labs22</div>
+    <div class="tagline">AR EXPERIENCE</div>
+
+    <h1>AR Marker - Display or Print This</h1>
+
+    <p class="instructions">
+        This is the HIRO marker. Display this image on another screen or print it out.
+        When you scan the QR code and point your camera at this marker,
+        the AR experience will appear overlaid on your camera view.
+    </p>
+
+    <div class="marker-container">
+        <!-- Standard HIRO marker used by AR.js -->
+        <img src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png" alt="HIRO AR Marker">
+    </div>
+
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-text">Display this marker on a computer screen or print it out</div>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-text">On your phone, scan the QR code from the main page</div>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-text">Point your phone camera at this HIRO marker</div>
+        </div>
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-text">Watch Labs22 portfolio appear in 3D on your camera!</div>
+        </div>
+    </div>
+
+    <a href="qr-code.html" class="btn">← Back to QR Code</a>
+</body>
+
+</html>

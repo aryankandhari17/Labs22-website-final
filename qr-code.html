@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labs22 | AR Experience QR Code</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0a0a0f 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.2em;
+            margin-bottom: 3rem;
+        }
+
+        .qr-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .qr-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .qr-subtitle {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .qr-wrapper {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 16px;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #qrcode img,
+        #qrcode canvas {
+            border-radius: 8px;
+        }
+
+        .scan-instruction {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .scan-icon {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                border-color: #667eea;
+            }
+
+            50% {
+                transform: scale(1.05);
+                border-color: #f093fb;
+            }
+        }
+
+        .scan-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: #667eea;
+        }
+
+        .url-input-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .url-label {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: block;
+        }
+
+        .url-input-wrapper {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-family: 'Inter', monospace;
+            font-size: 0.8rem;
+            color: #667eea;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .url-input:focus {
+            border-color: #667eea;
+        }
+
+        .update-btn {
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .update-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .url-hint {
+            margin-top: 0.75rem;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.3);
+            line-height: 1.5;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .download-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .features {
+            margin-top: 3rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea33 0%, #764ba233 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-icon svg {
+            width: 16px;
+            height: 16px;
+            stroke: #667eea;
+        }
+
+        .feature-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-desc {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .print-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .print-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .print-options {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .print-option {
+            padding: 0.6rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .print-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #667eea;
+            color: #fff;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: #fff !important;
+                color: #000;
+            }
+
+            .qr-card {
+                background: #fff;
+                border: 2px solid #000;
+                box-shadow: none;
+            }
+
+            .logo,
+            .tagline,
+            .features,
+            .download-btn,
+            .print-section,
+            .url-input-section {
+                display: none !important;
+            }
+
+            .qr-title,
+            .qr-subtitle,
+            .scan-instruction {
+                color: #000;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">Labs22</div>
+        <div class="tagline">AR Experience</div>
+
+        <div class="qr-card">
+            <h1 class="qr-title">Scan to Enter the Dome</h1>
+            <p class="qr-subtitle">Experience our portfolio in an immersive gallery</p>
+
+            <div class="qr-wrapper">
+                <div id="qrcode"></div>
+            </div>
+
+            <div class="scan-instruction">
+                <div class="scan-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                        <line x1="12" y1="18" x2="12" y2="18" />
+                    </svg>
+                </div>
+                <span>Scan with iPhone camera • Opens instantly</span>
+            </div>
+
+            <div class="url-input-section">
+                <label class="url-label">Production URL (for QR code)</label>
+                <div class="url-input-wrapper">
+                    <input type="url" id="urlInput" class="url-input" placeholder="https://yourdomain.com/ar-dome.html"
+                        value="">
+                    <button class="update-btn" onclick="updateQR()">Update QR</button>
+                </div>
+                <p class="url-hint">
+                    Enter your production URL where ar-dome.html will be hosted.<br>
+                    Currently showing: <span id="currentUrl" style="color: #667eea;"></span>
+                </p>
+            </div>
+
+            <button class="download-btn" onclick="downloadQR()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Download QR Code
+            </button>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <polygon points="10 8 16 12 10 16 10 8" />
+                    </svg>
+                </div>
+                <div class="feature-title">Auto-Launch</div>
+                <div class="feature-desc">No buttons, opens immediately</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                        <line x1="12" y1="18" x2="12" y2="18" />
+                    </svg>
+                </div>
+                <div class="feature-title">iPhone Ready</div>
+                <div class="feature-desc">Works in Safari, no app needed</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                    </svg>
+                </div>
+                <div class="feature-title">Dome View</div>
+                <div class="feature-desc">Futuristic immersive gallery</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                </div>
+                <div class="feature-title">Two Galleries</div>
+                <div class="feature-desc">Digital + Brand Identity</div>
+            </div>
+        </div>
+
+        <div class="print-section">
+            <h3 class="print-title">Print for Company Profile</h3>
+            <div class="print-options">
+                <button class="print-option" onclick="window.print()">Print QR Only</button>
+                <button class="print-option" onclick="downloadQR()">Download PNG</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let qrcode = null;
+
+        // Get the AR dome URL - use the HTTPS proxy port (3001)
+        function getDefaultUrl() {
+            const localIp = '192.168.68.100';
+            const port = '3001'; // The HTTPS proxy port
+            return `https://${localIp}:${port}/ar-marker.html`;
+        }
+
+        // Initialize QR code with a small delay to ensure library is ready
+        window.onload = function() {
+            const defaultUrl = getDefaultUrl();
+            document.getElementById('urlInput').placeholder = defaultUrl;
+            document.getElementById('urlInput').value = defaultUrl;
+            
+            setTimeout(() => {
+                initQR(defaultUrl);
+            }, 500);
+        };
+
+        function initQR(url) {
+            const qrContainer = document.getElementById("qrcode");
+            qrContainer.innerHTML = '';
+            
+            try {
+                qrcode = new QRCode(qrContainer, {
+                    text: url,
+                    width: 260, // Slightly larger
+                    height: 260,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                document.getElementById('currentUrl').textContent = url;
+            } catch (e) {
+                console.error("QR Error:", e);
+                qrContainer.innerHTML = '<p style="color:red">Error generating QR. Please refresh.</p>';
+            }
+        }
+
+        function updateQR() {
+            const urlInput = document.getElementById('urlInput');
+            let url = urlInput.value.trim();
+            if (!url) url = getDefaultUrl();
+            initQR(url);
+        }
+    </script>
+</body>
+
+</html>
